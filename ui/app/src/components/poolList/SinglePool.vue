@@ -4,28 +4,29 @@ import { computed, toRefs } from "@vue/reactivity";
 import Layout from "@/components/layout/Layout.vue";
 import SifButton from "@/components/shared/SifButton.vue";
 import { getAssetLabel, useAssetItem } from "@/components/shared/utils";
-import { Fraction, LiquidityProvider, Pool, usePoolCalculator, AssetAmount, Asset } from "ui-core";
+import {
+  Fraction,
+  LiquidityProvider,
+  Pool,
+  usePoolCalculator,
+  AssetAmount,
+  Asset,
+} from "ui-core";
 import { useCore } from "@/hooks/useCore";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
+import AssetDoubleImage from "@/components/shared/AssetDoubleImage.vue";
 
-const DECIMALS = 5
+const DECIMALS = 5;
 
 export default defineComponent({
   components: { Layout, SifButton },
-  props: {
-    accountPool: Object as PropType<{
-      lp: LiquidityProvider;
-      pool: Pool;
-    } | null>,
-  },
   setup(props) {
     const { config, store } = useCore();
     const route = useRoute().params.externalAsset;
     const refsStore = toRefs(store);
-    const accountPool = computed(
-      () => refsStore.accountpools.value.find(x => x.lp.asset.symbol === route)
+    const accountPool = computed(() =>
+      refsStore.accountpools.value.find((x) => x.lp.asset.symbol === route)
     );
-
     const fromSymbol = computed(() =>
       accountPool?.value?.pool.amounts[1].asset
         ? getAssetLabel(accountPool?.value.pool.amounts[1].asset)
@@ -41,12 +42,16 @@ export default defineComponent({
     });
 
     const fromValue = computed(() => {
-      return AssetAmount(Asset.get(fromSymbol.value || 'eth'),
+      return AssetAmount(
+        Asset.get(fromSymbol.value || "eth"),
         accountPool?.value?.lp.externalAmount?.toFixed(0) || 0,
-        { inBaseUnit:true }).toFixed(DECIMALS);
-    })
+        { inBaseUnit: true }
+      ).toFixed(DECIMALS);
+    });
 
-    const fromTotalValue = computed(() => accountPool?.value?.pool.amounts[1].toFixed(DECIMALS));
+    const fromTotalValue = computed(() =>
+      accountPool?.value?.pool.amounts[1].toFixed(DECIMALS)
+    );
 
     const toSymbol = computed(() =>
       accountPool?.value?.pool.amounts[0].asset
@@ -62,22 +67,24 @@ export default defineComponent({
       return t.imageUrl;
     });
 
-    const toTotalValue = computed(() => accountPool?.value?.pool.amounts[0].toFixed(DECIMALS));
+    const toTotalValue = computed(() =>
+      accountPool?.value?.pool.amounts[0].toFixed(DECIMALS)
+    );
 
     const toValue = computed(() => {
       // TD - Just using ETH asset because TO is always ROWAN at the moment
-      return AssetAmount(Asset.get('eth'),
+      return AssetAmount(
+        Asset.get("eth"),
         accountPool?.value?.lp?.nativeAmount?.toFixed(0) || 0,
-        { inBaseUnit:true }).toFixed(DECIMALS);
-    })
+        { inBaseUnit: true }
+      ).toFixed(DECIMALS);
+    });
 
     const poolUnitsAsFraction = computed(
       () => accountPool?.value?.lp.units || new Fraction("0")
     );
-
     const myPoolShare = computed(() => {
       if (!accountPool?.value?.pool?.poolUnits) return null;
-
 
       const perc = poolUnitsAsFraction.value
         .divide(accountPool?.value?.pool?.poolUnits)
@@ -85,7 +92,9 @@ export default defineComponent({
         .toFixed(2);
       return `${perc} %`;
     });
-    const myPoolUnits = computed(() => poolUnitsAsFraction.value.toFixed(DECIMALS));
+    const myPoolUnits = computed(() =>
+      poolUnitsAsFraction.value.toFixed(DECIMALS)
+    );
     return {
       accountPool,
       fromToken,
@@ -108,28 +117,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <Layout class="pool" backLink='/pool' title="Your Pair">
-    <div class="sheet" :class="!accountPool ? 'disabled' : 'active' ">
+  <Layout class="pool" backLink="/pool" title="Your Pair">
+    <div class="sheet" :class="!accountPool ? 'disabled' : 'active'">
       <div class="section">
         <div class="header" @click="$emit('poolselected')">
-          <div class="image">
-            <img
-              v-if="fromTokenImage"
-              width="22"
-              height="22"
-              :src="fromTokenImage"
-              class="info-img"
-            />
-            <div class="placeholder" :style="fromBackgroundStyle" v-else></div>
-            <img
-              v-if="toTokenImage"
-              width="22"
-              height="22"
-              :src="toTokenImage"
-              class="info-img"
-            />
-            <div class="placeholder" :style="toBackgroundStyle" v-else></div>
-          </div>
+          <AssetDoubleImage
+            :fromTokenImage="fromTokenImage"
+            :toTokenImage="toTokenImage"
+            :fromBackgroundStyle="fromBackgroundStyle"
+            :toBackgroundStyle="toBackgroundStyle"
+          />
           <div class="symbol">
             <span>{{ fromSymbol }}</span>
             /
@@ -217,20 +214,25 @@ export default defineComponent({
             to their share of the pool. Fees are added to the pool, accrue in
             real time and can be claimed by withdrawing your liquidity. To learn
             more, reference of documentation
-            <a target="_blank" href="https://docs.sifchain.finance/core-concepts/liquidity-pool"
+            <a
+              target="_blank"
+              href="https://docs.sifchain.finance/core-concepts/liquidity-pool"
               >here</a
             >
           </p>
         </div>
       </div>
       <div class="text--small mt-6 mb-2">
-        <a target="_blank" :href="`https://blockexplorer-${chainId}.sifchain.finance/`"
+        <a
+          target="_blank"
+          :href="`https://blockexplorer-${chainId}.sifchain.finance/`"
           >Blockexplorer</a
         >
       </div>
       <div class="section footer">
         <div class="mr-1">
-          <router-link :to="`/pool/remove-liquidity/${fromSymbol.toLowerCase()}`"
+          <router-link
+            :to="`/pool/remove-liquidity/${fromSymbol.toLowerCase()}`"
             ><SifButton primaryOutline nocase block
               >Remove Liquidity</SifButton
             ></router-link
@@ -253,7 +255,9 @@ export default defineComponent({
   background: $c_white;
   border-radius: $br_sm;
   border: $divider;
-  &.disabled { opacity: .3 }
+  &.disabled {
+    opacity: 0.3;
+  }
   .section {
     padding: 8px 12px;
   }
@@ -270,7 +274,7 @@ export default defineComponent({
     color: $c_text;
   }
 
-  .image {
+  /* .image {
     height: 22px;
 
     & > * {
@@ -281,7 +285,7 @@ export default defineComponent({
         left: -6px;
       }
     }
-  }
+  } */
 
   .row {
     display: flex;
@@ -303,10 +307,10 @@ export default defineComponent({
       }
     }
 
-    .image,
+    /* .image,
     .placeholder {
       margin-left: 4px;
-    }
+    } */
   }
 
   .info {
@@ -314,7 +318,7 @@ export default defineComponent({
     font-weight: 400;
   }
 
-  .placeholder {
+  /* .placeholder {
     display: inline-block;
     background: #aaa;
     box-sizing: border-box;
@@ -322,7 +326,7 @@ export default defineComponent({
     height: 22px;
     width: 22px;
     text-align: center;
-  }
+  } */
 
   .footer {
     display: flex;
