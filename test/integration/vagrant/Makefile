@@ -84,10 +84,8 @@ sifdocker-start:
 sifdocker-sh:
 	docker exec -ti sifdocker bash
 
-d1:
-	@echo cd /sifnode/test/integration
-	@echo cat setupgeth.sh
-	docker run --rm -p 9091:8545 --name xx -p 9092:8546 -v /home/james/workspace/sifnode/:/sifnode -ti sifdocker bash
+gethdocker-start:
+	docker run -d --rm -p 9091:8545 -p 9092:8546 --name gethdocker -v $(shell pwd)/../../..:/sifnode sifdocker bash -c "/sifnode/test/integration/setupgeth.sh 0xBBe52eeA1cB7324092900E5b0De8C346422b591D"
 
 extra:
 	# install web3, used for passsword extraction

@@ -16,3 +16,5 @@ do
   geth attach /tmp/gethdata/geth.ipc --exec "eth.sendTransaction({from:eth.coinbase, to:\"$i\", value:$one_hundred_eth})"
   geth attach /tmp/gethdata/geth.ipc --exec "eth.getBalance(\"$i\")"
 done
+
+tail -F /dev/null
