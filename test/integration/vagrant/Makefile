@@ -83,3 +83,23 @@ sifdocker-start:
 
 sifdocker-sh:
 	docker exec -ti sifdocker bash
+
+d1:
+	@echo cd /sifnode/test/integration
+	@echo cat setupgeth.sh
+	docker run --rm -p 9091:8545 --name xx -p 9092:8546 -v /home/james/workspace/sifnode/:/sifnode -ti sifdocker bash
+
+extra:
+	# install web3, used for passsword extraction
+	curl -LSs https://raw.githubusercontent.com/gochain/web3/master/install.sh | sh
+
+
+#const fs = require("fs");
+#const keythereum = require("keythereum");
+#
+#const KEYSTORE = "KeystoreFileName";
+#const PASSWORD = "YourPassword";
+#
+#const keyObject = JSON.parse(fs.readFileSync(KEYSTORE, {encoding: "utf8"}));
+#const privateKey = keythereum.recover(PASSWORD, keyObject).toString("hex");
+#console.log(`0x${keyObject.address}: 0x${privateKey}`);

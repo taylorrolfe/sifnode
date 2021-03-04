@@ -75,3 +75,10 @@ Don't mix this with vagrantenv.sh; use one or the other in a shell.
 ## Github actions
 
 See [the github action file](../../.github/workflows/integrationtest.yml) for the description of what's executed in the integration test environment.
+
+## Pieces
+
+### Ganache
+### ebrelayer
+### sifnoded
+### Ethereum smart contract deployment
