@@ -103,3 +103,6 @@ extra:
 #const keyObject = JSON.parse(fs.readFileSync(KEYSTORE, {encoding: "utf8"}));
 #const privateKey = keythereum.recover(PASSWORD, keyObject).toString("hex");
 #console.log(`0x${keyObject.address}: 0x${privateKey}`);
+
+#geth attach /tmp/gethdata/geth.ipc --exec 'eth.sendTransaction({from:eth.coinbase, to:"0xBBe52eeA1cB7324092900E5b0De8C346422b591D", value:100000000000000000000})'
+#geth attach /tmp/gethdata/geth.ipc --exec 'eth.getBalance("0xBBe52eeA1cB7324092900E5b0De8C346422b591D")'
