@@ -1,12 +1,14 @@
-initial_addresses=$*
+initial_addresses="$*"
+
+wsport=7545
 
 nohup geth --networkid 5777 --datadir /tmp/gethdata \
   --dev \
-  --ws --ws.addr 0.0.0.0 --ws.api personal,eth,net,web3 \
-  --http --http.addr 0.0.0.0 --http.api personal,eth,net,web3 \
+  --ws --ws.addr 0.0.0.0 --ws.port $wsport --ws.api personal,eth,net,web3 \
+  --http --http.addr 0.0.0.0 --http.port 8646 --http.api personal,eth,net,web3 \
   --mine --miner.threads=1 > /tmp/gethlog.txt 2>&1 &
 
-while ! nc -z localhost 8545; do
+while ! nc -z localhost $wsport; do
   sleep 1
 done
 
@@ -17,4 +19,4 @@ do
   geth attach /tmp/gethdata/geth.ipc --exec "eth.getBalance(\"$i\")"
 done
 
-tail -F /dev/null
+# tail -F /dev/null
