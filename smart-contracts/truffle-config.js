@@ -12,7 +12,7 @@ module.exports = {
   networks: {
     geth: {
       host: "localhost",
-      port: 9091,
+      port: 7545, // Match default network 'ganache'
       network_id: 5777,
       gas: 6721975, // Truffle default development block gas limit
       gasPrice: 200000000000

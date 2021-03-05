@@ -50,13 +50,19 @@ pk=$(cat $GANACHE_KEYS_JSON | jq -r ".private_keys[\"$addr\"]")
 set_persistant_env_var EBRELAYER_ETHEREUM_ADDR $addr $envexportfile
 set_persistant_env_var EBRELAYER_ETHEREUM_PRIVATE_KEY $pk $envexportfile
 
-# start geth, and use the keys that ganache creates
-docker kill gethdocker || true
-docker run -d --rm -p 9091:8545 -p 9092:8546 --name gethdocker -v $(shell pwd)/../../..:/sifnode sifdocker bash -c "/sifnode/test/integration/setupgeth.sh 0xBBe52eeA1cB7324092900E5b0De8C346422b591D"
+# start geth, and use the keys that ganache creates since the tests already know
+# how to use those keys
+# docker kill gethdocker || true
+all_keys=$(less vagrant/data/ganachekeys.json  | jq -r '.private_keys | keys | .[]')
+# docker run -d --rm -p 9091:8545 -p 9092:8546 --name gethdocker -v $(pwd)/../..:/sifnode sifdocker bash -c "/sifnode/test/integration/setupgeth.sh $all_keys"
+pkill geth || true
+pkill ganache || true
+sleep 2
+$BASEDIR/test/integration/setupgeth.sh $all_keys
 
 # https://www.trufflesuite.com/docs/truffle/overview
 # and note that truffle migrate and truffle deploy are the same command
-INITIAL_VALIDATOR_ADDRESSES=$EBRELAYER_ETHEREUM_ADDR npx truffle deploy --network develop --reset
+INITIAL_VALIDATOR_ADDRESSES=$EBRELAYER_ETHEREUM_ADDR npx truffle deploy --network geth --reset
 
 # ETHEREUM_CONTRACT_ADDRESS is used for the BridgeRegistry address in many places, so we
 # set it and BRIDGE_REGISTRY_ADDRESS to the same value
