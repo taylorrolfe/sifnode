@@ -1,11 +1,18 @@
 initial_addresses="$*"
 
-wsport=7545
+# httpport is the same port ganache uses
+httpport=7545
+wsport=8646
+
+pkill geth || true
+sleep 1
+
+apis=personal,eth,net,web3,debug
 
 nohup geth --networkid 5777 --datadir /tmp/gethdata \
   --dev \
-  --ws --ws.addr 0.0.0.0 --ws.port $wsport --ws.api personal,eth,net,web3 \
-  --http --http.addr 0.0.0.0 --http.port 8646 --http.api personal,eth,net,web3 \
+  --ws --ws.addr 0.0.0.0 --ws.port $wsport --ws.api $apis \
+  --http --http.addr 0.0.0.0 --http.port $httpport --http.api $apis \
   --mine --miner.threads=1 > /tmp/gethlog.txt 2>&1 &
 
 while ! nc -z localhost $wsport; do
