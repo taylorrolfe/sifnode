@@ -13,6 +13,7 @@ nohup geth --networkid 5777 --datadir /tmp/gethdata \
   --dev \
   --ws --ws.addr 0.0.0.0 --ws.port $wsport --ws.api $apis \
   --http --http.addr 0.0.0.0 --http.port $httpport --http.api $apis \
+  --dev.period 1 \
   --mine --miner.threads=1 > /tmp/gethlog.txt 2>&1 &
 
 while ! nc -z localhost $wsport; do

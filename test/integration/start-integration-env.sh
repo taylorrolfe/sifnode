@@ -30,7 +30,7 @@ set_persistant_env_var datadir ${TEST_INTEGRATION_DIR}/vagrant/data $envexportfi
 set_persistant_env_var CONTAINER_NAME integration_sifnode1_1 $envexportfile
 set_persistant_env_var NETWORKDIR $BASEDIR/deploy/networks $envexportfile
 set_persistant_env_var GANACHE_DB_DIR $(mktemp -d /tmp/ganachedb.XXXX) $envexportfile
-set_persistant_env_var ETHEREUM_WEBSOCKET_ADDRESS ws://localhost:7545/ $envexportfile
+set_persistant_env_var ETHEREUM_WEBSOCKET_ADDRESS ws://localhost:8646/ $envexportfile
 set_persistant_env_var CHAINNET localnet $envexportfile
 mkdir -p $datadir
 
@@ -82,7 +82,7 @@ set_persistant_env_var BRIDGE_BANK_ADDRESS $(cat $BASEDIR/smart-contracts/build/
 rm -rf $SMART_CONTRACTS_DIR/relayerdb
 ADD_VALIDATOR_TO_WHITELIST=true bash ${BASEDIR}/test/integration/setup_sifchain.sh && . $envexportfile
 
-UPDATE_ADDRESS=0x0000000000000000000000000000000000000000 npx truffle exec scripts/setTokenLockBurnLimit.js 31000000000000000000
-UPDATE_ADDRESS=$BRIDGE_TOKEN_ADDRESS npx truffle exec scripts/setTokenLockBurnLimit.js 10000000000000000000000000
+#UPDATE_ADDRESS=0x0000000000000000000000000000000000000000 npx truffle exec scripts/setTokenLockBurnLimit.js 31000000000000000000
+#UPDATE_ADDRESS=$BRIDGE_TOKEN_ADDRESS npx truffle exec scripts/setTokenLockBurnLimit.js 10000000000000000000000000
 
 logecho finished $0

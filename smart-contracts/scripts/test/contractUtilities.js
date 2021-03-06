@@ -21,9 +21,9 @@ function buildProvider(context, argv, logging) {
                 provider = new Web3(netConnectionString);
             }
             break;
-        case "http://localhost:7545":
-            provider = new Web3.providers.HttpProvider(argv.ethereum_network);
-            break;
+        // case "http://localhost:7545":
+        //     provider = new Web3.providers.HttpProvider(argv.ethereum_network);
+        //     break;
         default:
             const privateKeyDefault = getRequiredEnvironmentVariable(argv.ethereum_private_key_env_var);
             provider = new HDWalletProvider(

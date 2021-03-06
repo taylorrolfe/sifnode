@@ -109,7 +109,7 @@ cmdfile = open("/tmp/testcmds.txt", "w")
 
 
 def get_shell_output(command_line):
-    cmdfile.write(command_line)
+    cmdfile.write(command_line + "\n")
     if "sifnodecli" in command_line and not "q auth account" in command_line:
         time.sleep(2)
     logging.debug(f"execute shell command:\n{command_line}")
